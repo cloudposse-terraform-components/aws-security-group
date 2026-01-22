@@ -9,16 +9,6 @@ components:
       vars:
         name: "security-group-bypass"
         enabled: true
-        # Bypass account-map remote state
-        account_map_enabled: false
-        account_map:
-          full_account_map:
-            default-test: "123456789012"
-          audit_account_account_name: "default-test"
-          root_account_account_name: "default-test"
-          identity_account_account_name: "default-test"
-          aws_partition: "aws"
-          iam_role_arn_templates: {}
         # Provide VPC ID directly (overrides remote state)
         vpc_id: "vpc-12345678"
         security_group_description: "Security group with bypass patterns"
