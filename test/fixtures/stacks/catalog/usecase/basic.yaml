@@ -1,0 +1,20 @@
+components:
+  terraform:
+    security-group/basic:
+      metadata:
+        component: target
+      vars:
+        name: "security-group"
+        enabled: true
+        account_map_tenant_name: core
+        security_group_description: "Test security group"
+        allow_all_egress: true
+        rules:
+          - key: "https-ingress"
+            type: "ingress"
+            from_port: 443
+            to_port: 443
+            protocol: "tcp"
+            cidr_blocks:
+              - "0.0.0.0/0"
+            description: "Allow HTTPS inbound"

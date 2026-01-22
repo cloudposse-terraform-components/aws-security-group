@@ -1,0 +1,23 @@
+# Test case for account_map bypass pattern
+# When account_map_enabled is false, the component uses the static account_map variable
+# instead of looking up account-map via remote state
+components:
+  terraform:
+    security-group/bypass:
+      metadata:
+        component: target
+      vars:
+        name: "security-group-bypass"
+        enabled: true
+        account_map_enabled: false
+        account_map:
+          full_account_map:
+            default-test: "123456789012"
+          audit_account_account_name: "default-test"
+          root_account_account_name: "default-test"
+          identity_account_account_name: "default-test"
+          aws_partition: "aws"
+          iam_role_arn_templates: {}
+        security_group_description: "Security group with account_map bypass"
+        allow_all_egress: true
+        rules: []
