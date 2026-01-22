@@ -3,34 +3,6 @@ variable "region" {
   description = "AWS Region"
 }
 
-variable "account_map_component_name" {
-  type        = string
-  description = "The name of the account-map component"
-  default     = "account-map"
-}
-
-variable "account_map_environment_name" {
-  type        = string
-  description = "The name of the environment where `account_map` is provisioned"
-  default     = "gbl"
-}
-
-variable "account_map_stage_name" {
-  type        = string
-  description = "The name of the stage where `account_map` is provisioned"
-  default     = "root"
-}
-
-variable "account_map_tenant_name" {
-  type        = string
-  description = <<-EOT
-  The name of the tenant where `account_map` is provisioned.
-
-  If the `tenant` label is not used, leave this as `null`.
-  EOT
-  default     = null
-}
-
 variable "vpc_id" {
   type        = string
   description = <<-EOT
