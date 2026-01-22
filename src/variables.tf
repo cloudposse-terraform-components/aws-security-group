@@ -31,33 +31,13 @@ variable "account_map_tenant_name" {
   default     = null
 }
 
-variable "vpc_remote_state_enabled" {
-  type        = bool
+variable "vpc_id" {
+  type        = string
   description = <<-EOT
-    Enable VPC remote state lookup. When disabled, use the `vpc` variable to provide VPC outputs directly.
+    The ID of the VPC where the Security Group will be created.
+    If provided, this overrides the VPC ID from remote state lookup.
     EOT
-  default     = true
-}
-
-variable "vpc" {
-  type = object({
-    vpc_id               = string
-    private_subnet_ids   = optional(list(string), [])
-    public_subnet_ids    = optional(list(string), [])
-    private_subnet_cidrs = optional(list(string), [])
-    public_subnet_cidrs  = optional(list(string), [])
-  })
-  description = <<-EOT
-    VPC outputs to use when `vpc_remote_state_enabled` is `false`.
-    At minimum, `vpc_id` must be provided.
-    EOT
-  default = {
-    vpc_id               = ""
-    private_subnet_ids   = []
-    public_subnet_ids    = []
-    private_subnet_cidrs = []
-    public_subnet_cidrs  = []
-  }
+  default     = null
 }
 
 variable "vpc_component_name" {

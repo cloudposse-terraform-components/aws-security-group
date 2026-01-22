@@ -18,12 +18,13 @@ module "vpc" {
   version = "1.8.0"
 
   component   = var.vpc_component_name
-  environment = var.vpc_remote_state_enabled ? coalesce(var.vpc_environment_name, module.this.environment) : ""
-  stage       = var.vpc_remote_state_enabled ? coalesce(var.vpc_stage_name, module.this.stage) : ""
-  tenant      = var.vpc_remote_state_enabled ? coalesce(var.vpc_tenant_name, module.this.tenant) : ""
+  environment = coalesce(var.vpc_environment_name, module.this.environment)
+  stage       = coalesce(var.vpc_stage_name, module.this.stage)
+  tenant      = coalesce(var.vpc_tenant_name, module.this.tenant)
 
-  bypass   = !var.vpc_remote_state_enabled
-  defaults = var.vpc
+  defaults = {
+    vpc_id = var.vpc_id
+  }
 
   context = module.this.context
 }

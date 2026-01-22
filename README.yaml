@@ -91,25 +91,17 @@ usage: |-
   When `account_map_enabled: false`, the component bypasses the remote state lookup and uses
   the static `account_map` variable directly.
 
-  ### VPC Bypass Pattern
+  ### Providing VPC ID Directly
 
-  Similarly, you can bypass the VPC remote state lookup by setting `vpc_remote_state_enabled: false`
-  and providing the VPC outputs directly:
+  You can provide the VPC ID directly via the `vpc_id` variable, which overrides the remote state lookup:
 
   ```yaml
   components:
     terraform:
       security-group/lambda:
         vars:
-          # Disable VPC remote state lookup
-          vpc_remote_state_enabled: false
-          # Provide VPC outputs directly
-          vpc:
-            vpc_id: "vpc-12345678"
-            private_subnet_ids:
-              - "subnet-abc123"
-              - "subnet-def456"
-            public_subnet_ids: []
+          # Provide VPC ID directly (overrides remote state lookup)
+          vpc_id: "vpc-12345678"
   ```
 
   This is useful when:
