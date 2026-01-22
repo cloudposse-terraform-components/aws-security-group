@@ -1,7 +1,7 @@
 locals {
   enabled = module.this.enabled
 
-  vpc_id = var.vpc_id != null ? var.vpc_id : module.vpc[0].outputs.vpc_id
+  vpc_id = module.vpc.outputs.vpc_id
 }
 
 module "security_group" {

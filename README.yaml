@@ -91,6 +91,32 @@ usage: |-
   When `account_map_enabled: false`, the component bypasses the remote state lookup and uses
   the static `account_map` variable directly.
 
+  ### VPC Bypass Pattern
+
+  Similarly, you can bypass the VPC remote state lookup by setting `vpc_remote_state_enabled: false`
+  and providing the VPC outputs directly:
+
+  ```yaml
+  components:
+    terraform:
+      security-group/lambda:
+        vars:
+          # Disable VPC remote state lookup
+          vpc_remote_state_enabled: false
+          # Provide VPC outputs directly
+          vpc:
+            vpc_id: "vpc-12345678"
+            private_subnet_ids:
+              - "subnet-abc123"
+              - "subnet-def456"
+            public_subnet_ids: []
+  ```
+
+  This is useful when:
+  - The VPC was created outside of Atmos/Terraform
+  - You want to reference a VPC from a different state backend
+  - You're using Atmos functions like `!terraform.output` to fetch the VPC ID
+
   ### Referencing the Security Group from Other Components
 
   Once deployed, other components can reference this security group via remote state or Atmos store:

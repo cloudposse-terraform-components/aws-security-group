@@ -1,6 +1,6 @@
-# Test case for account_map bypass pattern
-# When account_map_enabled is false, the component uses the static account_map variable
-# instead of looking up account-map via remote state
+# Test case for account_map and VPC bypass patterns
+# When account_map_enabled and vpc_remote_state_enabled are false,
+# the component uses the static variables instead of remote state lookups
 components:
   terraform:
     security-group/bypass:
@@ -9,6 +9,7 @@ components:
       vars:
         name: "security-group-bypass"
         enabled: true
+        # Bypass account-map remote state
         account_map_enabled: false
         account_map:
           full_account_map:
@@ -18,6 +19,12 @@ components:
           identity_account_account_name: "default-test"
           aws_partition: "aws"
           iam_role_arn_templates: {}
-        security_group_description: "Security group with account_map bypass"
+        # Bypass VPC remote state - provide VPC ID directly
+        vpc_remote_state_enabled: false
+        vpc:
+          vpc_id: "vpc-12345678"
+          private_subnet_ids: []
+          public_subnet_ids: []
+        security_group_description: "Security group with bypass patterns"
         allow_all_egress: true
         rules: []

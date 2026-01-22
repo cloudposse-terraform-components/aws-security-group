@@ -31,15 +31,59 @@ variable "account_map_tenant_name" {
   default     = null
 }
 
+variable "vpc_remote_state_enabled" {
+  type        = bool
+  description = <<-EOT
+    Enable VPC remote state lookup. When disabled, use the `vpc` variable to provide VPC outputs directly.
+    EOT
+  default     = true
+}
+
+variable "vpc" {
+  type = object({
+    vpc_id               = string
+    private_subnet_ids   = optional(list(string), [])
+    public_subnet_ids    = optional(list(string), [])
+    private_subnet_cidrs = optional(list(string), [])
+    public_subnet_cidrs  = optional(list(string), [])
+  })
+  description = <<-EOT
+    VPC outputs to use when `vpc_remote_state_enabled` is `false`.
+    At minimum, `vpc_id` must be provided.
+    EOT
+  default = {
+    vpc_id               = ""
+    private_subnet_ids   = []
+    public_subnet_ids    = []
+    private_subnet_cidrs = []
+    public_subnet_cidrs  = []
+  }
+}
+
 variable "vpc_component_name" {
   type        = string
   description = "The name of the VPC component to fetch remote state from"
   default     = "vpc"
 }
 
-variable "vpc_id" {
+variable "vpc_environment_name" {
   type        = string
-  description = "The ID of the VPC where the Security Group will be created. If not provided, will be looked up via remote state using `vpc_component_name`"
+  description = "The name of the environment where the VPC component is provisioned. Defaults to the current environment."
+  default     = null
+}
+
+variable "vpc_stage_name" {
+  type        = string
+  description = "The name of the stage where the VPC component is provisioned. Defaults to the current stage."
+  default     = null
+}
+
+variable "vpc_tenant_name" {
+  type        = string
+  description = <<-EOT
+  The name of the tenant where the VPC component is provisioned.
+  Defaults to the current tenant.
+  EOT
   default     = null
 }
 
