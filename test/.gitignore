@@ -1,0 +1,8 @@
+# Go
+go.sum
+
+# Atmos
+.atmos/
+
+# Terraform state
+state/

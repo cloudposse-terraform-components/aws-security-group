@@ -1,0 +1,159 @@
+name: "aws-security-group"
+# Canonical GitHub repo
+github_repo: "cloudposse-terraform-components/aws-security-group"
+# Short description of this project
+description: |-
+  This component provisions AWS Security Groups that can be shared across multiple components.
+  It is a thin wrapper around the `cloudposse/security-group/aws` module that integrates with the
+  Atmos stack configuration and remote state patterns.
+
+usage: |-
+  **Stack Level**: Regional
+
+  Here's an example snippet for how to use this component.
+
+  ```yaml
+  # catalog/security-group/defaults
+  components:
+    terraform:
+      security-group/defaults:
+        metadata:
+          type: abstract
+          component: security-group
+        vars:
+          enabled: true
+          allow_all_egress: true
+          # Configure where account-map is deployed (required when account_map_enabled: true)
+          account_map_tenant_name: core
+  ```
+
+  ```yaml
+  # catalog/security-group/lambda
+  import:
+    - catalog/security-group/defaults
+
+  components:
+    terraform:
+      security-group/lambda:
+        metadata:
+          inherits:
+            - security-group/defaults
+        vars:
+          name: "lambda"
+          security_group_description: "Security group for Lambda functions"
+          rules:
+            - type: "egress"
+              from_port: 0
+              to_port: 0
+              protocol: "-1"
+              cidr_blocks: ["0.0.0.0/0"]
+              ipv6_cidr_blocks: ["::/0"]
+  ```
+
+  ```yaml
+  # stacks/orgs/acme/plat/dev/us-east-2/network.yaml
+  import:
+    - catalog/security-group/lambda
+
+  components:
+    terraform:
+      security-group/lambda:
+        vars:
+          enabled: true
+  ```
+
+  ### Account Map Bypass Pattern
+
+  By default, this component uses the `account-map` component via remote state for IAM role lookups
+  (`account_map_enabled: true`). For environments migrating to Atmos Auth or using static account
+  mappings, you can disable this and provide a static `account_map` variable instead:
+
+  ```yaml
+  # stacks/orgs/acme/_defaults.yaml
+  vars:
+    # Disable account-map remote state lookup
+    account_map_enabled: false
+    # Provide static account mapping
+    account_map:
+      full_account_map:
+        acme-core-root: "111111111111"
+        acme-core-audit: "222222222222"
+        acme-plat-dev: "333333333333"
+        acme-plat-prod: "444444444444"
+      audit_account_account_name: "acme-core-audit"
+      root_account_account_name: "acme-core-root"
+      identity_account_account_name: "acme-core-identity"
+      aws_partition: "aws"
+      iam_role_arn_templates:
+        terraform: "arn:aws:iam::%s:role/acme-core-gbl-auto-terraform"
+  ```
+
+  When `account_map_enabled: false`, the component bypasses the remote state lookup and uses
+  the static `account_map` variable directly.
+
+  ### Providing VPC ID Directly
+
+  You can provide the VPC ID directly via the `vpc_id` variable, which overrides the remote state lookup:
+
+  ```yaml
+  components:
+    terraform:
+      security-group/lambda:
+        vars:
+          # Provide VPC ID directly (overrides remote state lookup)
+          vpc_id: "vpc-12345678"
+  ```
+
+  This is useful when:
+  - The VPC was created outside of Atmos/Terraform
+  - You want to reference a VPC from a different state backend
+  - You're using Atmos functions like `!terraform.output` to fetch the VPC ID
+
+  ### Referencing the Security Group from Other Components
+
+  Once deployed, other components can reference this security group via remote state or Atmos store:
+
+  ```yaml
+  components:
+    terraform:
+      lambda/my-function:
+        vars:
+          vpc_config:
+            security_group_ids:
+              - '{{ atmos.Store "my-store" .stack "security-group/lambda" "security_group_id" }}'
+  ```
+
+references:
+  - name: cloudposse/security-group/aws
+    description: The underlying Terraform module
+    url: https://github.com/cloudposse/terraform-aws-security-group
+  - name: cloudposse-terraform-components
+    description: Cloud Posse's upstream component library
+    url: https://github.com/orgs/cloudposse-terraform-components/repositories
+tags:
+  - component/security-group
+  - layer/network
+  - provider/aws
+# Categories of this project
+categories:
+  - component/security-group
+  - layer/network
+  - provider/aws
+# License of this project
+license: "APACHE2"
+# Badges to display
+badges:
+  - name: Latest Release
+    image: https://img.shields.io/github/release/cloudposse-terraform-components/aws-security-group.svg?style=for-the-badge
+    url: https://github.com/cloudposse-terraform-components/aws-security-group/releases/latest
+  - name: Slack Community
+    image: https://slack.cloudposse.com/for-the-badge.svg
+    url: https://slack.cloudposse.com
+related:
+  - name: "Cloud Posse Terraform Modules"
+    description: Our collection of reusable Terraform modules used by our reference architectures.
+    url: "https://docs.cloudposse.com/modules/"
+  - name: "Atmos"
+    description: "Atmos is like docker-compose but for your infrastructure"
+    url: "https://atmos.tools"
+contributors: []

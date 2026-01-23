@@ -1,0 +1,15 @@
+components:
+  terraform:
+    vpc:
+      vars:
+        enabled: true
+        name: vpc
+        ipv4_primary_cidr_block: "172.16.0.0/16"
+        availability_zones:
+          - "a"
+          - "b"
+        nat_gateway_enabled: false
+        nat_instance_enabled: false
+        max_subnet_count: 2
+        vpc_flow_logs_enabled: false
+        subnet_type_tag_key: "eg.cptest.co/subnet/type"

@@ -1,0 +1,12 @@
+components:
+  terraform:
+    security-group/egress-only:
+      metadata:
+        component: target
+      vars:
+        name: "security-group-egress"
+        enabled: true
+        account_map_tenant_name: core
+        security_group_description: "Egress-only security group for Lambda functions"
+        allow_all_egress: true
+        rules: []

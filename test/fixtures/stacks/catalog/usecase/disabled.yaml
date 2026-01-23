@@ -1,0 +1,8 @@
+components:
+  terraform:
+    security-group/disabled:
+      metadata:
+        component: target
+      vars:
+        name: "security-group"
+        enabled: false

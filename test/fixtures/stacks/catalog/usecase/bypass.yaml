@@ -1,0 +1,16 @@
+# Test case for bypass patterns using defaults
+# When vpc_id is provided, it overrides the remote state lookup
+# When account_map_enabled is false, the static account_map is used
+components:
+  terraform:
+    security-group/bypass:
+      metadata:
+        component: target
+      vars:
+        name: "security-group-bypass"
+        enabled: true
+        # Provide VPC ID directly (overrides remote state)
+        vpc_id: "vpc-12345678"
+        security_group_description: "Security group with bypass patterns"
+        allow_all_egress: true
+        rules: []
