@@ -1,8 +1,9 @@
 
 
 <!-- markdownlint-disable -->
-# aws-security-group <a href="https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse-terraform-components/aws-security-group&utm_content="><img align="right" src="https://cloudposse.com/logo-300x69.svg" width="150" /></a>
-<a href="https://github.com/cloudposse-terraform-components/aws-security-group/releases/latest"><img src="https://img.shields.io/github/release/cloudposse-terraform-components/aws-security-group.svg?style=for-the-badge" alt="Latest Release"/></a><a href="https://slack.cloudposse.com"><img src="https://slack.cloudposse.com/for-the-badge.svg" alt="Slack Community"/></a>
+<a href="https://cpco.io/homepage"><img src="https://github.com/cloudposse-terraform-components/aws-security-group/blob/main/.github/banner.png?raw=true" alt="Project Banner"/></a><br/>
+    <p align="right">
+<a href="https://github.com/cloudposse-terraform-components/aws-security-group/releases/latest"><img src="https://img.shields.io/github/release/cloudposse-terraform-components/aws-security-group.svg?style=for-the-badge" alt="Latest Release"/></a><a href="https://slack.cloudposse.com"><img src="https://slack.cloudposse.com/for-the-badge.svg" alt="Slack Community"/></a></p>
 <!-- markdownlint-restore -->
 
 <!--
@@ -151,7 +152,7 @@ This is useful when:
 
 ### Referencing the Security Group from Other Components
 
-Once deployed, other components can reference this security group via remote state or Atmos store:
+Once deployed, other components can reference this security group using the `!terraform.state` Atmos function:
 
 ```yaml
 components:
@@ -160,7 +161,7 @@ components:
       vars:
         vpc_config:
           security_group_ids:
-            - '{{ atmos.Store "my-store" .stack "security-group/lambda" "security_group_id" }}'
+            - !terraform.state security-group/lambda security_group_id
 ```
 
 > [!IMPORTANT]

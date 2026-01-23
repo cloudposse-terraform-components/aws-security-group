@@ -107,7 +107,7 @@ components:
 
 ### Referencing the Security Group from Other Components
 
-Once deployed, other components can reference this security group via remote state:
+Once deployed, other components can reference this security group using the `!terraform.state` Atmos function:
 
 ```yaml
 components:
@@ -116,7 +116,7 @@ components:
       vars:
         vpc_config:
           security_group_ids:
-            - '{{ atmos.Store "my-store" .stack "security-group/lambda" "security_group_id" }}'
+            - !terraform.state security-group/lambda security_group_id
 ```
 
 <!-- markdownlint-disable -->
