@@ -6,7 +6,7 @@ locals {
 
 module "vpc" {
   source  = "cloudposse/stack-config/yaml//modules/remote-state"
-  version = "1.8.0"
+  version = "2.0.0"
 
   component   = var.vpc_component_name
   environment = local.vpc_remote_state_enabled ? coalesce(var.vpc_environment_name, module.this.environment) : ""
